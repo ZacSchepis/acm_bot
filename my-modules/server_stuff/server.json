@@ -1,0 +1,32 @@
+{
+  "servers": [
+    {
+      "serverID": "613534490941325315",
+      "logChannel": null,
+      "welcomeChannel": null,
+      "passwordRoles": [],
+      "inviteLogging": null
+    },
+    {
+      "serverID": "865361823897354240",
+      "logChannel": null,
+      "welcomeChannel": null,
+      "passwordRoles": [],
+      "inviteLogging": null
+    },
+    {
+      "serverID": "950091351792418866",
+      "logChannel": null,
+      "welcomeChannel": null,
+      "passwordRoles": [],
+      "inviteLogging": null
+    },
+    {
+      "serverID": "983845125035814922",
+      "logChannel": null,
+      "welcomeChannel": null,
+      "passwordRoles": [],
+      "inviteLogging": null
+    }
+  ]
+}
