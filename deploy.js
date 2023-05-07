@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-const { clientId, guildId, token } = require('../discord-bot/config.json');
+const { clientId, guildId, token } = require('./config.json');
 const { PermissionFlagsBits } = require('discord-api-types/v10');
 
 const commands = [
@@ -73,9 +73,9 @@ const commands = [
 	new SlashCommandBuilder().setName('eventform').setDescription('Sends you a link to sign into a club event').addUserOption(option=>option.setName('target').setDescription("Mention someone to direct them to fill out an event form."))
 	,new SlashCommandBuilder().setName('uptime').setDescription('Displays how long ACM bot has been online for!')
 	,new SlashCommandBuilder().setName('gradecalc').setDescription('Calculate your grade in a class').addAttachmentOption(option=>option.setName('gradesfile').setDescription('Text file to grab your grades from').setRequired(true))
-	,new SlashCommandBuilder().setName('enablelogging').setDescription("Enables logging for this server.").setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+	,new SlashCommandBuilder().setName('enablelogging').setDescription("Enables logging for this server.").addChannelOption(option=>option.setName("logchannel").setDescription('The logging channel to log to').setRequired(true)).setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 	,new SlashCommandBuilder().setName('enablerolemenu').setDescription("Enables role menu creation for this server.").setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-	,new SlashCommandBuilder().setName('enablebasicwelcome').setDescription("Enables the bot to send a basic welcome message.").setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+	,new SlashCommandBuilder().setName('enablebasicwelcome').setDescription("Enables the bot to send a basic welcome message.").addChannelOption(option=>option.setName("welcomechannel").setDescription('The channel to send welcomes to').setRequired(true)).setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 	,new SlashCommandBuilder().setName("randomxkcd").setDescription("Sends a random XKCD comic.")	
 		
 ]
