@@ -2,31 +2,136 @@
   "servers": [
     {
       "serverID": "613534490941325315",
-      "logChannel": null,
-      "welcomeChannel": null,
-      "passwordRoles": [],
-      "inviteLogging": null
+      "logChannel": "906679055821201408",
+      "welcomeChannel": "613534490941325319",
+      "suggestionChannel": null,
+      "passwordRoles": [
+        {
+          "password": "student",
+          "role": "892904752256536679",
+          "description":"This gives you the standard student role"
+        },
+        {
+          "password": "club member",
+          "role": "947239082508050462",
+          "description":"This gives you a verified club member role. You should only use this password if you've already filled out a [club membership form](https://forms.gle/QF8izhyuGwCjmyr18)"
+        },
+        {
+          "password": "teacher",
+          "role": "892906852801712189",
+          "description":"***For teachers/professors only***: this gives you the professor role, used to distinguish professors from students and club members within this server."
+        },
+        {
+          "password": "NA",
+          "role": "987035258316800031",
+          "description":"This gives you the new/incoming students role."
+        }
+      ],
+      "inviteLogging": null,
+      "leetCode": "",
+      "serverName": "ISU ACM",
+      "passwordChannel": "947229739653943386",
+      "tempRole": "947229770163318874",
+      "signupForm": "https://forms.gle/QF8izhyuGwCjmyr18",
+      "eventForm": "https://forms.gle/xjvH7RbXpK1zdQpT9"
     },
     {
       "serverID": "865361823897354240",
-      "logChannel": null,
-      "welcomeChannel": null,
+      "logChannel": "870459376048148531",
+      "welcomeChannel": "865361823897354244",
+      "suggestionChannel": null,
       "passwordRoles": [],
-      "inviteLogging": null
+      "inviteLogging": null,
+      "leetCode": "",
+      "serverName": "AutoHotKey Test Server",
+      "passwordChannel": null,
+      "tempRole": null,
+      "signupForm": null,
+      "eventForm": null
     },
     {
       "serverID": "950091351792418866",
-      "logChannel": null,
-      "welcomeChannel": null,
-      "passwordRoles": [],
-      "inviteLogging": null
+      "logChannel": "950092605906124850",
+      "welcomeChannel": "950091351792418873",
+      "suggestionChannel": null,
+      "passwordRoles": [
+        {
+          "password": "NA",
+          "role": "1012133853906874530",
+          "description":"This gives you the new/incoming students role."
+        },
+        {
+          "password": "club member",
+          "role": "1012133999642165309",
+          "description":"This gives you a verified club member role. You should only use this password if you've already filled out a [club membership form](https://forms.gle/BsAL7F9yp8Lxfcmq8)"
+        },
+        {
+          "password": "student",
+          "role": "950097249537495130",
+          "description":"This gives you the standard student role"
+        }
+      ],
+      "inviteLogging": null,
+      "leetCode": "",
+      "serverName": "IEEE ISU",
+      "passwordChannel": "950092870264713306",
+      "tempRole": "950091472072482918",
+      "signupForm": "https://forms.gle/BsAL7F9yp8Lxfcmq8",
+      "eventForm": null
     },
     {
       "serverID": "983845125035814922",
       "logChannel": null,
       "welcomeChannel": null,
+      "suggestionChannel": "1127051844963803276",
       "passwordRoles": [],
-      "inviteLogging": null
+      "inviteLogging": null,
+      "leetCode": "",
+      "serverName": "BotTesting Server",
+      "passwordChannel": null,
+      "tempRole": null,
+      "signupForm": null,
+      "eventForm": null
+    },
+    {
+      "serverID": "679891550204985385",
+      "logChannel": null,
+      "welcomeChannel": null,
+      "suggestionChannel": null,
+      "passwordRoles": [
+        {
+          "password": "student",
+          "role": "1053504757781770250",
+          "description":"(***This one very likely applies to you***) for all ISU students"
+        },
+        {
+          "password": "other",
+          "role": "1053510250432565380",
+          "description":"If you are not an ISU student"
+        },
+        {
+          "password": "friend",
+          "role": "1053510242769584198",
+          "description":"If you are a friend that was dragged into this server because <@256670401411678208> said to join it"
+        },
+        {
+          "password": "teacher",
+          "role": "1053510132606177290",
+          "description":"If you are a professor at ISU"
+        },
+        {
+          "password": "alumni",
+          "role": "1053504799070498927",
+          "description":"If you are an ISU Alumni"
+        }
+      ],
+      "inviteLogging": null,
+      "leetCode": "",
+      "serverName": "ISU chit chat",
+      "passwordChannel": "1053502105442320444",
+      "tempRole": null,
+      "signupForm": null,
+      "eventForm": null
     }
   ]
 }
