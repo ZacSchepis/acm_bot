@@ -1,5 +1,5 @@
 # ACM Bot
-<img title="ACM logo" alt="ACM logo" src="https://media.discordapp.net/attachments/906667378929197147/987032124865523722/acm_logo_1.png>
+<img title="ACM logo" alt="ACM logo" src="https://media.discordapp.net/attachments/906667378929197147/987032124865523722/acm_logo_1.png">
 
 # Recent Changes to ACM Bot(2023-07-08T22:06:35.730Z)
 ## Less Redundant Code
