@@ -3,34 +3,48 @@
 //     `**Description**: ${command.description}`,
 //     `**Cooldown**: ${command.cooldown}`
 // ].join("\n")
-function getSubCommandsString(command, fields=[]){
-    if (!command.options){
-        fields.push({name:command.name, value:command.description})
+const types = {
+    3:'STRING',
+    4:'INTEGER',
+    5:'BOOLEAN',
+    6:'USER',
+    7:'CHANNEL',
+    8:'ROLE',
+    9:'MENTIONABLE',
+    10:'NUMBER',
+    11:'ATTACHMENT',
+}
+function getCommandString(command, fields=[]){
+    if(!command.options){
+        fields.push({name:command.name,value:command.description})
     }
-    else if ( command.options.length>1){
-        command.options.forEach(element=>{
-            let args = element.options ? `\nArgs: ${element.options.map(ele => ele.name).join(" ")}` : ""
-            fields.push({name:`${command.name} ${element.name}`, value:`${element.description}${args}`})
-            // if(element.options) getSubCommandsString(element, fields)
-        })
-    }
-    else if (command.options.length == 1){
-        let arg = command.options[0].name ? `\nArg: ${command.options[0].name}` : ""
-        fields.push({name:`${command.name}`, value:`${command.description}${arg}`})
+    else if(command.options){
+        let noSubs = {name:`/${command.name} `, value:`${command.description}\nArgs: `};
+        let noSubsTruth = false
+        for(let subGroup=0;subGroup<command.options.length;subGroup++){
+            let com = command.options[subGroup];            
+            if(com.type === 2){
+                // if the current command is of type 2, it is a subcommandGroup, therfore,
+                //  it has another level to go into the subcommands in that subcommandGroup
+                for( const subCommand of com.options ){
+                    let args = subCommand.options ? `\nArgs: ${subCommand.options.map(ele=>`${ele.name} (type:${types[ele.type]})`).join(" ")}` : "";
+                    fields.push({name:`/${command.name} ${com.name} ${subCommand.name}`, value: `${subCommand.description}${args}`})
+                }
+            }
+            else if( com.type ===1 ){
+                // else if it type 1, it is a subcommand so explore that instead
+                let args = com.options ? `\nArgs: ${com.options.map(ele => `${ele.name} (type:${types[ele.type]})`).join(" ")}` : "";
+                fields.push({name: `/${command.name} ${com.name}`, value: `${com.description}${args}`})
+            }
+            else if( com.type > 2 && com.type <12 ){
+                noSubs.value += `${com.name} (type:${types[com.type]}) `
+                noSubsTruth = true
+            }
+        }
+        if(noSubsTruth === true) fields.push(noSubs)
     }
     return fields
 }
-function typeing(command){
-    
-}
-
-// conditional logic:
-// base command
-//  sub command 
-//      sub command args
-// args
-// basic command
-
 
 module.exports = {
     name: 'help',
@@ -48,7 +62,7 @@ module.exports = {
                 'autocomplete':true
             }
         ]
-    },
+    },    
     async autocomplete(interaction){
         const client = interaction.client
         let choices = []
@@ -72,7 +86,7 @@ module.exports = {
         if(comm !== undefined && comm !== null){
             const command = client.commands.get(comm)
             if(!command) return
-            let fields = getSubCommandsString(command.data);
+            let fields = getCommandString(command.data);
             const desc = [
                 `**Base Command Name**: ${command.name}`,
                 `**Description**: ${command.description}`,
@@ -83,6 +97,9 @@ module.exports = {
                 description: desc,
                 fields:fields,
                 color: client.user.hex,
+                thumbnail:{
+                    url:"https://media.discordapp.net/attachments/906667378929197147/987032124865523722/acm_logo_1.png"
+                }
             }
             return interaction.reply({embeds:[helpfulEmbed]})
         }
@@ -102,5 +119,6 @@ module.exports = {
             }, 
         }
         return interaction.reply({embeds:[helpEmbed]})
-    }
+    },
+    getCommandString
 }
