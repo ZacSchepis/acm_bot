@@ -4,7 +4,7 @@ module.exports = {
     cooldown:2,
     data:{
         'name':'ping',
-        'description':'responds with "PONG"'
+        'description':'Responds with "PONG"'
     },
     execute(interaction){
         return interaction.reply({content:'PONG'})

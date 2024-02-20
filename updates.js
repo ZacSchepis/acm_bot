@@ -70,7 +70,7 @@ module.exports= {
         let updateNotes;
         const commandFoldersPath = join(__dirname, 'commands');
         const commandFolders = fs.readdirSync(commandFoldersPath);
-        let file_contents = `# ACM Bot\n<img title="ACM logo" alt="ACM logo" src="${updates.thumbnail.url}>`
+        let file_contents = `# ACM Bot\n<img title="ACM logo" alt="ACM logo" src="${updates.thumbnail.url}"/>`
         let level = 0
         for(const folder of commandFolders){
             level +=1 

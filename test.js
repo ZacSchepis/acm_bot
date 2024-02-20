@@ -1,6 +1,58 @@
-const fs = require("fs")
-const Discord = require('discord.js')
+const {google} = require('googleapis')
+const { auth } = require('google-auth-library')
+
+const { token, clientId } = require('./config.json');
+//const {psicom, SI} =require('./searchingFile')
+const { Client, GatewayIntentBits, Partials ,IntentsBitField, DiscordAPIError, PermissionsBitField} = require('discord.js');
+const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const rp = require('request-promise');
+require("./my-modules/server_stuff/server.json")
+const myIntents = new IntentsBitField();
+const { Routes } = require('discord-api-types/v9');
 const {join} = require('path')
+const Discord = require('discord.js')
+
+
+myIntents.add(IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMembers, IntentsBitField.Flags.MessageContent, IntentsBitField.Flags.GuildMessages, IntentsBitField.Flags.DirectMessages)
+const client = new Client({ 
+    intents: 
+    [GatewayIntentBits.GuildMembers,myIntents], partials: [Partials.Channel, Partials.Message, Partials.Reaction] });
+
+const googleClient = new google.auth.GoogleAuth({
+  keyFile: './credentials.json',
+  scopes: ['https://www.googleapis.com/auth/calendar.readonly']
+})
+client.once('ready', async () =>{
+  console.log('logged in baby')
+})
+client.on('messageCreate', async (message)=>{
+  if(message.author.id !== "294781978815889409") return;
+  const cal = google.calendar('v3')
+  const cli = await googleClient.getClient();
+
+  const events = await cal.events.list({
+    auth: cli,
+    calendarId: 'c_29an57vstk0tarj9v8l22m1ggo@group.calendar.google.com',
+    timeMin: new Date().toISOString(),
+    maxResults: 5,
+    singleEvents: true,
+    orderBy: 'startTime'
+  })
+  const upcoming = events.data.items;
+  if(upcoming.lengths >0){
+    upcoming.forEach((ev)=>{
+      console.log(`- ${ev.summary}: ${ev.start.dateTime}`)
+    })
+  }
+})
+
+
+
+client.login(token)
+
+// const fs = require("fs")
+// const Discord = require('discord.js')
+// const {join} = require('path')
 // const path = req
 // const skelecmms = new Discord.Collection()
 // const commandPath = join(__dirname, 'commands')
@@ -17,75 +69,289 @@ const {join} = require('path')
 
 // find('data')
 
-const data =[{
-  'name':'bulkdelete',
-  'description':'Bulk deletes x messages in channel',
-  'options':[
-      {
-          'name':'number',
-          'description':'Deletes x amount of messages',
-          'type':4,
-          'required':true
-      },
-      {
-          'name':'channel', 
-          'description':'Channel to bulk delete in',
-          'type':7,
-          'required':false
-      }
-  ]
-},
-{
-  'name':'tutor',
-  'description':'Tutor commands',
-  'options':[
-      {
-          'name':'course',
-          'description':'Search for a specifc CS courses tutors',
-          'type':1,
-          'required':false,
-          'focused':true,
-          'autocomplete':true,
-          'options':[
-              {'name':'number','description':'Course number', 'type':3,'required':true}
-          ]
-      },
-      {
-          'name':'tutorer',
-          'description':'Search for a specific tutorer to search for',
-          'type':1,
-          'required':false,
-          'focused':true,
-          'autocomplete':true,
-          'options':[
-              {'name':'name','description':'Tutorer name','type':3,'required':true}
-          ]
-      }
-  ]
-}]
-// console.log(data)
-function determineBranched(dat, s=[]){
-  if(dat.length>0){
-    let subcommand = 1;
-    let subcommandGroup = 2
-    // let s =[]
-    for( const ops of dat){
-      if (ops.type === subcommand){
-        console.log(`${ops.name} is subcommand`)
-        s.push({name:ops.name, value:ops.options.map(ele=>ele.name).join(' ')})
-      }
-      else if( ops.type === subcommandGroup ){
-        console.log(`${ops.name} is subcommand group`)
-        determineBranched(ops.options, s)
+// const data =[
+//   {
+//     'name':'settings',
+//     'description':'Set various server settings',
+//     'default_member_permissions':String(1<<5),
+//     'options':[
+//         {
+//             'name':'enable',
+//             'description':'Enable certain server settings',
+//             'type':2,
+//             'options':[
+//                 {
+//                     'name':'logging',
+//                     'description':'Enable logging for this server',
+//                     'type':1,
+//                     'options':[
+//                         {'name':'channel','description':'Channel to enable logging to','required':true,'type':7}
+//                     ]
+//                 },
+//                 {
+//                     'name':'welcome',
+//                     'description':'Enable welcome message upon user joining',
+//                     'type':1,
+//                     'options':[
+//                         {'name':'channel','description':'Channel to send welcome messages to upon user join','required':true,'type':7}
+//                     ]
+//                 },
+//                 {
+//                     'name':'rolemenu',
+//                     'description':'Enable rolemenu creation for this server',
+//                     'type':1
+//                 },
+//                 {
+//                     'name':'passwordjoin',
+//                     'description':'[BETA] Allows for password verification',
+//                     'type':1,
+//                     'options':[
+//                         {'name':'passwordchannel','description':'Channel to watch for passwords in','required':true,'type':7},
+//                     ]
+//                 }
+//             ]
+//         },
+//         {
+//             'name':'disable',
+//             'description':'Disable certain server settings',
+//             'type':2,
+//             'options':[
+//                 {
+//                     'name':'logging',
+//                     'description':'Disable logging for this server',
+//                     'type':1,
+//                 },
+//                 {
+//                     'name':'welcome',
+//                     'description':'Disable welcome message upon user joining',
+//                     'type':1,
+//                 },
+//                 {
+//                     'name':'rolemenu',
+//                     'description':'Disable rolemenu creation for this server',
+//                     'type':1
+//                 },
+//                 {
+//                     'name':'passwordjoin',
+//                     'description':'Disables password verification for this server',
+//                     'type':1,
+//                 }
+//             ]
+//         }
+//     ]
+
+
+// },
+//   {
+//   'name':'bulkdelete',
+//   'description':'Bulk deletes x messages in channel',
+//   'options':[
+//       {
+//           'name':'number',
+//           'description':'Deletes x amount of messages',
+//           'type':4,
+//           'required':true
+//       },
+//       {
+//           'name':'channel', 
+//           'description':'Channel to bulk delete in',
+//           'type':7,
+//           'required':false
+//       }
+//   ]
+// },
+// {
+//   'name':'tutor',
+//   'description':'Tutor commands',
+//   'options':[
+//       {
+//           'name':'course',
+//           'description':'Search for a specifc CS courses tutors',
+//           'type':1,
+//           'required':false,
+//           'focused':true,
+//           'autocomplete':true,
+//           'options':[
+//               {'name':'number','description':'Course number', 'type':3,'required':true}
+//           ]
+//       },
+//       {
+//           'name':'tutorer',
+//           'description':'Search for a specific tutorer to search for',
+//           'type':1,
+//           'required':false,
+//           'focused':true,
+//           'autocomplete':true,
+//           'options':[
+//               {'name':'name','description':'Tutorer name','type':3,'required':true}
+//           ]
+//       }
+//   ]
+// }]
+// const {getCommandString} = require('./commands/helpful/help.js')
+// // let f = getCommandString(data[0])
+// // console.log(f)
+// const mysql = require('mysql')
+// const {mysqlInfo} = require('./config.json')
+// // const test_example = {user:{id:"3002"},guild:{id:"30910"}}
+// const { create, read, update, delete_} = require("./attempting.js");
+// const test_users = [
+//   {user:{id:"3337"}, guild:{id:"5893"}},
+//   {user:{id:"94032"}, guild:{id:"5893"}},
+//   {user:{id:"897"}, guild:{id:"5893"}},
+//   {user:{id:"3348823"}, guild:{id:"5893"}},
+//   {user:{id:"3002"}, guild:{id:"5893"}}
+// ]
+// let idx = 4;
+// console.log(test_users[idx])
+// // test_users.map(ele=>{create.addGuildUser(ele)})
+// let check_ = read.getGuildTop10(test_users[idx])
+// // .then((res)=>{return res}).catch((err)=>{console.log(err)})
+// check_.then((res)=>{console.log(res)}).catch((err)=>{console.log(err)})
+// const exp = require("constants")
+// let commands_ = []
+// const folderPath = join(__dirname, 'commands');
+// const commandFolders = fs.readdirSync(folderPath);
+// for (const folder of commandFolders){
+// 	const commandsPath = join(folderPath, folder);
+// 	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'))
+// 	for (const file of commandFiles){
+// 		const filePath = join(commandsPath, file);
+// 		const command = require(filePath);
+// 		if('data' in command && 'execute' in command){
+//             commands_.push(command)
+//         }
+// 	}
+// }
+function insertCom(command){
+  const sql = "INSERT INTO slash_commands_data (name, data) VALUES (?, ?)";
+  // console.log(command.name)
+  // return
+  const vals = [command.name, JSON.stringify(command.data)]
+  connection.query(sql, vals, (err, result)=>{
+    if (err) {
+      console.error(`Error inserting command '${command.name}':`, err);
+    } else {
+      console.log(`Command '${command.name}' inserted successfully.`);
+    }
+  })
+}
+
+
+ function displayComs(name){
+  const sql = "SELECT data FROM slash_commands_data WHERE name = ?"
+  const values = [name];
+  console.log("beginning...")
+    connection.query(sql, values, (err, rows) => {
+    if (err) {
+      console.error(`Error retrieving command '${name}':`, err);
+    } else {
+      if (rows.length > 0) {
+        const command = JSON.parse(rows[0].data);
+        console.log(`Command '${name}':`, command);
+        // console.log(getCommandString(command))
+        return command
+        // return JSON.parse(rows[0].data)
+      } 
+      else {
+        console.log(`Command '${name}' not found.`);
       }
     }
-    return s
-
-  }
+  });
 }
-const{ updateREADME }= require('./updates.js')
-updateREADME()
-// console.log(determineBranched(data))
+getCommandJSON = async (name)=> {
+  const sql = "SELECT data FROM slash_commands_data WHERE name = ?";
+  const values = [name];
+  return new Promise((resolve, reject)=>{
+    connection.query(sql, values, (err, rows)=>{
+      if(rows === undefined) reject(new Error("Error: rows is undefined"))
+      resolve(JSON.parse(rows[0].data))
+    })
+  })
+}
+
+
+
+function GenericQuery(sql, values){
+  return new Promise((resolve, reject)=>{
+    connection.query(sql, values, (err, rows)=>{
+      if(err){
+        reject(new Error(`Error during the query process\n${JSON.stringify({"sql":sql,"values":values,"error":err.sqlMessage},null, 2)}`))
+      }
+      else if (rows.length === 0 || rows === undefined) reject(new Error("No results were returned from query."))
+      else resolve(rows)
+
+    })
+  })
+}
+function Wrapper(prep){
+  connection.connect( (err)=>{
+    if(err){ console.log('error while connecting...'); return; }
+    console.log('Connected');
+    let res = getXP(prep)
+    connection.end((err) =>{
+      if(err){ console.log("Error while trying to close..."); return; }
+    })
+    return res
+  })
+}
+// async function get(prep){
+// }
+function getXP (test_){
+  const sql = "SELECT * FROM experience WHERE userid = ? AND serverid = ?";
+  const values = [test_.user.id, test_.guild.id]
+  return GenericQuery(sql, values)
+}
+async function test_it(){
+  // 1. Possible mishaps...
+  //    - User doesn't exist in DB, so...
+  //        - would need to add
+  //    - User exists, but 
+}
+// connection.connect((err)=> {
+//   if(err){
+//     console.error('Error connecting to database: ', err)
+//     return
+//   }
+//   console.log("Connected!");
+//   // let output = await getCommandJSON("settings").then((res)=>{return res}).catch((err)=>console.log(`Promise rejection error: ${err}`))
+//   // console.log(getCommandString(output))
+//   const sql = "INSERT into experience (userid,level,xp,serverid,hex_value) values (?,1,0,?,230)";
+//   const values = ["8008","40384032"]
+//   let checking_ = connection.query(sql, values, (err, rows) =>{
+//     if(err){ console.log(err); }
+//     console.log(rows)
+//   })
+//   // console.log(`Result from generic:\n-----${JSON.stringify(checking_, null, 2)}`)
+  
+//   // Close the MySQL connection
+//   connection.end((err) => {
+//     if (err) {
+//       console.error('Error closing the MySQL connection:', err);
+//       return;
+//     }
+//     console.log('MySQL connection closed.');
+//     return checking_
+//   });
+// })
+
+
+// console.log(try_it)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

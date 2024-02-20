@@ -51,7 +51,7 @@ module.exports = {
             suggestionChannel.send({content:'<@294781978815889409>',embeds:[suggestionEmbed]})
             return interaction.reply({content:`Sending: ${suggestion} to ${suggestionChannel.name}`, ephemeral: true})
         }
-        if(sugType === 'server'){
+        else if(sugType === 'server'){
             const guildId = interaction.guild.id;
             const column = 'suggestionChannel'
             let suggestionChannel = client.ss.genericServerSearch(column, guildId)
@@ -60,7 +60,7 @@ module.exports = {
                 suggestionChannel.send({embeds:[suggestionEmbed]})
                 return interaction.reply({content:`Sending: ${suggestion} to ${suggestionChannel.name}`, ephemeral:true})
             }
-            if(suggestionChannel === null){
+            else if(suggestionChannel === null){
                 return interaction.reply({content:"This server currently doesn't have this feature enabled", ephemeral:true})
             }
         }
