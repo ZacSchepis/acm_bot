@@ -3,3 +3,6 @@ credentials.json
 config.json
 *.json
 test.*
+*.env
+*.txt
+*.py

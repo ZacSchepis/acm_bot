@@ -44,7 +44,19 @@ client.logging = new Discord.Collection()
 //const mondayDayReminder = {title: "ACM Club Meeting This Thursday", description: "This thursday there will be an ACM Club Meeting @ 5pm in the [Lilibridge Engineering Lounge](https://goo.gl/maps/JCUxgBBd3cDFe5Jk7)",color: 0x00a4c9, thumbnail:{url: "https://media.discordapp.net/attachments/906667378929197147/987032124865523722/acm_logo_1.png"}}
 const { Event } = require('./my-modules/events/event_builder.js')
 const { join } = require('path')
+const EventEmitter = require('events');
+const event = new EventEmitter();
+const EVENTS = {JOB_COMPLETE: 'JOB COMPLETE'}
+//TODO: Add a job complete event
+event.on(EVENTS.JOB_COMPLETE, ()=>{
+    //Use some method to remove teh job from the stack
+    if(jobsQueue.length === 0){
+        return;
+    }
+    jobsQueue.shift().stop();
 
+    // and then it is all good
+})
 
 let jobsIdx = 0
 const jobsQueue = []
@@ -63,6 +75,8 @@ const executeJobs = ()=>{
         const { cronExpression, jobFunction } = jobInfo;
         if(cron.schedule(cronExpression).next().isSameOrBefore(currentTime)){
             jobFunction();
+            event.emit(EVENTS.JOB_COMPLETE);
+
         }
     })
 }
